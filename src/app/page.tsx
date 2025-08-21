@@ -2,102 +2,241 @@ import Image from "next/image";
 
 export default function Home() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="font-sans">
+      {/* Hero Section */}
+      <section className="bg-gradient-to-r from-orange-600 to-yellow-600 text-white py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="text-4xl md:text-6xl font-bold mb-6">
+            Explore Theravada Cannon. Discover Inner Peace. Realise Nonexistence.
+          </h1>
+          <p className="text-xl md:text-2xl mb-8 max-w-4xl mx-auto italic">
+            "Admonition of all Lord Buddhas is to refrain from all sins, to generate merits, and to control one's mind."
+          </p>
+          <div className="flex gap-4 justify-center flex-col sm:flex-row">
+            <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-8 rounded-full transition-colors">
+              INITIATIVES
+            </button>
+            <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-8 rounded-full transition-colors">
+              PROGRAMS
+            </button>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </section>
+
+      {/* Main Content Section */}
+      <section className="py-16 bg-gray-50 dark:bg-gray-900">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-orange-600 mb-8">
+              Sabbapapassa Akaranan - Kusalassa Upasampada
+              <br />
+              Sachiththapariyodapanan - Ethan Buddhanasasanan
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+            {/* ICTB Programs */}
+            <div className="text-center p-8 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
+              <div className="w-20 h-20 mx-auto mb-6">
+                <svg viewBox="0 0 100 100" className="w-full h-full text-orange-500">
+                  <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" strokeWidth="3"/>
+                  <g stroke="currentColor" strokeWidth="2" fill="none">
+                    <line x1="50" y1="10" x2="50" y2="25"/>
+                    <line x1="50" y1="75" x2="50" y2="90"/>
+                    <line x1="10" y1="50" x2="25" y2="50"/>
+                    <line x1="75" y1="50" x2="90" y2="50"/>
+                    <line x1="21.5" y1="21.5" x2="32" y2="32"/>
+                    <line x1="68" y1="68" x2="78.5" y2="78.5"/>
+                    <line x1="78.5" y1="21.5" x2="68" y2="32"/>
+                    <line x1="32" y1="68" x2="21.5" y2="78.5"/>
+                  </g>
+                  <circle cx="50" cy="50" r="8" fill="currentColor"/>
+                </svg>
+              </div>
+              <h3 className="text-xl font-bold text-purple-600 mb-4">ICTB Programs</h3>
+              <p className="text-gray-600 dark:text-gray-300 mb-6">
+                Our diverse range of programs is designed to support our mission of promoting peace, mindfulness, and community well-being. Here,
+              </p>
+              <button className="bg-orange-600 hover:bg-orange-700 text-white py-2 px-6 rounded font-medium">
+                Read More
+              </button>
+            </div>
+
+            {/* Our Partners */}
+            <div className="text-center p-8 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
+              <div className="w-20 h-20 mx-auto mb-6">
+                <svg viewBox="0 0 100 100" className="w-full h-full text-orange-500">
+                  <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" strokeWidth="3"/>
+                  <g stroke="currentColor" strokeWidth="2" fill="none">
+                    <line x1="50" y1="10" x2="50" y2="25"/>
+                    <line x1="50" y1="75" x2="50" y2="90"/>
+                    <line x1="10" y1="50" x2="25" y2="50"/>
+                    <line x1="75" y1="50" x2="90" y2="50"/>
+                    <line x1="21.5" y1="21.5" x2="32" y2="32"/>
+                    <line x1="68" y1="68" x2="78.5" y2="78.5"/>
+                    <line x1="78.5" y1="21.5" x2="68" y2="32"/>
+                    <line x1="32" y1="68" x2="21.5" y2="78.5"/>
+                  </g>
+                  <circle cx="50" cy="50" r="8" fill="currentColor"/>
+                </svg>
+              </div>
+              <h3 className="text-xl font-bold text-purple-600 mb-4">Our Partners</h3>
+              <p className="text-gray-600 dark:text-gray-300 mb-6">
+                At the International Centre for Theravada Buddhism (ICTB), we are proud to collaborate with esteemed organizations from around the world.
+              </p>
+              <button className="bg-orange-600 hover:bg-orange-700 text-white py-2 px-6 rounded font-medium">
+                Read More
+              </button>
+            </div>
+
+            {/* Donations */}
+            <div className="text-center p-8 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
+              <div className="w-20 h-20 mx-auto mb-6">
+                <svg viewBox="0 0 100 100" className="w-full h-full text-orange-500">
+                  <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" strokeWidth="3"/>
+                  <g stroke="currentColor" strokeWidth="2" fill="none">
+                    <line x1="50" y1="10" x2="50" y2="25"/>
+                    <line x1="50" y1="75" x2="50" y2="90"/>
+                    <line x1="10" y1="50" x2="25" y2="50"/>
+                    <line x1="75" y1="50" x2="90" y2="50"/>
+                    <line x1="21.5" y1="21.5" x2="32" y2="32"/>
+                    <line x1="68" y1="68" x2="78.5" y2="78.5"/>
+                    <line x1="78.5" y1="21.5" x2="68" y2="32"/>
+                    <line x1="32" y1="68" x2="21.5" y2="78.5"/>
+                  </g>
+                  <circle cx="50" cy="50" r="8" fill="currentColor"/>
+                </svg>
+              </div>
+              <h3 className="text-xl font-bold text-purple-600 mb-4">Donations</h3>
+              <p className="text-gray-600 dark:text-gray-300 mb-6">
+                Your generosity is crucial in helping the International Centre for Theravada Buddhism (ICTB) expand and develop its presence in Australia.
+              </p>
+              <button className="bg-orange-600 hover:bg-orange-700 text-white py-2 px-6 rounded font-medium">
+                Read More
+              </button>
+            </div>
+          </div>
+
+          {/* Second Row */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+            {/* Upcoming Events */}
+            <div className="text-center p-8 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
+              <div className="w-20 h-20 mx-auto mb-6">
+                <svg viewBox="0 0 100 100" className="w-full h-full text-orange-500">
+                  <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" strokeWidth="3"/>
+                  <g stroke="currentColor" strokeWidth="2" fill="none">
+                    <line x1="50" y1="10" x2="50" y2="25"/>
+                    <line x1="50" y1="75" x2="50" y2="90"/>
+                    <line x1="10" y1="50" x2="25" y2="50"/>
+                    <line x1="75" y1="50" x2="90" y2="50"/>
+                    <line x1="21.5" y1="21.5" x2="32" y2="32"/>
+                    <line x1="68" y1="68" x2="78.5" y2="78.5"/>
+                    <line x1="78.5" y1="21.5" x2="68" y2="32"/>
+                    <line x1="32" y1="68" x2="21.5" y2="78.5"/>
+                  </g>
+                  <circle cx="50" cy="50" r="8" fill="currentColor"/>
+                </svg>
+              </div>
+              <h3 className="text-xl font-bold text-purple-600 mb-4">Upcoming Events</h3>
+              <p className="text-gray-600 dark:text-gray-300 mb-6">
+                At the International Centre for Theravada Buddhism (ICTB), we are committed to fostering a vibrant and engaged community through a diverse range of events.
+              </p>
+              <button className="bg-orange-600 hover:bg-orange-700 text-white py-2 px-6 rounded font-medium">
+                Read More
+              </button>
+            </div>
+
+            {/* Meditation Program */}
+            <div className="text-center p-8 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
+              <div className="w-20 h-20 mx-auto mb-6">
+                <svg viewBox="0 0 100 100" className="w-full h-full text-orange-500">
+                  <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" strokeWidth="3"/>
+                  <g stroke="currentColor" strokeWidth="2" fill="none">
+                    <line x1="50" y1="10" x2="50" y2="25"/>
+                    <line x1="50" y1="75" x2="50" y2="90"/>
+                    <line x1="10" y1="50" x2="25" y2="50"/>
+                    <line x1="75" y1="50" x2="90" y2="50"/>
+                    <line x1="21.5" y1="21.5" x2="32" y2="32"/>
+                    <line x1="68" y1="68" x2="78.5" y2="78.5"/>
+                    <line x1="78.5" y1="21.5" x2="68" y2="32"/>
+                    <line x1="32" y1="68" x2="21.5" y2="78.5"/>
+                  </g>
+                  <circle cx="50" cy="50" r="8" fill="currentColor"/>
+                </svg>
+              </div>
+              <h3 className="text-xl font-bold text-purple-600 mb-4">Meditation Program</h3>
+              <p className="text-gray-600 dark:text-gray-300 mb-6">
+                At the International Centre for Theravada Buddhism (ICTB), our Meditation Program is at the heart of our mission to promote peace, mindfulness, and inner well-being.
+              </p>
+              <button className="bg-orange-600 hover:bg-orange-700 text-white py-2 px-6 rounded font-medium">
+                Read More
+              </button>
+            </div>
+
+            {/* Special Announcements */}
+            <div className="text-center p-8 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
+              <div className="w-20 h-20 mx-auto mb-6">
+                <svg viewBox="0 0 100 100" className="w-full h-full text-orange-500">
+                  <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" strokeWidth="3"/>
+                  <g stroke="currentColor" strokeWidth="2" fill="none">
+                    <line x1="50" y1="10" x2="50" y2="25"/>
+                    <line x1="50" y1="75" x2="50" y2="90"/>
+                    <line x1="10" y1="50" x2="25" y2="50"/>
+                    <line x1="75" y1="50" x2="90" y2="50"/>
+                    <line x1="21.5" y1="21.5" x2="32" y2="32"/>
+                    <line x1="68" y1="68" x2="78.5" y2="78.5"/>
+                    <line x1="78.5" y1="21.5" x2="68" y2="32"/>
+                    <line x1="32" y1="68" x2="21.5" y2="78.5"/>
+                  </g>
+                  <circle cx="50" cy="50" r="8" fill="currentColor"/>
+                </svg>
+              </div>
+              <h3 className="text-xl font-bold text-purple-600 mb-4">Special Announcements</h3>
+              <p className="text-gray-600 dark:text-gray-300 mb-6">
+                We are thrilled to share a special announcement that marks a significant milestone for the International Centre for Theravada Buddhism (ICTB).
+              </p>
+              <button className="bg-orange-600 hover:bg-orange-700 text-white py-2 px-6 rounded font-medium">
+                Read More
+              </button>
+            </div>
+          </div>
+
+          {/* Buddha Quotes Section */}
+          <div className="text-center py-16 bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-700 rounded-lg">
+            <div className="w-20 h-20 mx-auto mb-6">
+              <svg viewBox="0 0 100 100" className="w-full h-full text-orange-500">
+                <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" strokeWidth="3"/>
+                <g stroke="currentColor" strokeWidth="2" fill="none">
+                  <line x1="50" y1="10" x2="50" y2="25"/>
+                  <line x1="50" y1="75" x2="50" y2="90"/>
+                  <line x1="10" y1="50" x2="25" y2="50"/>
+                  <line x1="75" y1="50" x2="90" y2="50"/>
+                  <line x1="21.5" y1="21.5" x2="32" y2="32"/>
+                  <line x1="68" y1="68" x2="78.5" y2="78.5"/>
+                  <line x1="78.5" y1="21.5" x2="68" y2="32"/>
+                  <line x1="32" y1="68" x2="21.5" y2="78.5"/>
+                </g>
+                <circle cx="50" cy="50" r="8" fill="currentColor"/>
+              </svg>
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold text-orange-600 mb-8">Buddha Quotes</h2>
+            <div className="max-w-4xl mx-auto">
+              <p className="text-lg md:text-xl text-gray-700 dark:text-gray-300 italic mb-4">
+                Conquer anger with non-anger. Conquer badness with goodness. Conquer meanness with generosity.
+              </p>
+              <p className="text-lg md:text-xl text-gray-700 dark:text-gray-300 italic">
+                Conquer dishonesty with truth
+              </p>
+            </div>
+            {/* Pagination dots */}
+            <div className="flex justify-center mt-8 space-x-2">
+              <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
+              <div className="w-3 h-3 bg-gray-300 rounded-full"></div>
+              <div className="w-3 h-3 bg-gray-300 rounded-full"></div>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
