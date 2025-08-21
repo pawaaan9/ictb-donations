@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 
 interface Brick {
   id: string;
@@ -20,6 +20,20 @@ interface CartItem {
 export default function DonatePage() {
   const [hoveredSection, setHoveredSection] = useState<string | null>(null);
   const [cart, setCart] = useState<CartItem[]>([]);
+  const [zoomLens, setZoomLens] = useState<{
+    visible: boolean;
+    x: number;
+    y: number;
+    centerX: number;
+    centerY: number;
+  }>({
+    visible: false,
+    x: 0,
+    y: 0,
+    centerX: 0,
+    centerY: 0,
+  });
+  const svgRef = useRef<SVGSVGElement>(null);
 
   // Define the Chaithya structure with four stacked parts
   const chaithyaSections = [
@@ -125,6 +139,57 @@ export default function DonatePage() {
     return hoveredSection === sectionName ? 'scale-110' : 'scale-100';
   };
 
+  const handleMouseMove = (e: React.MouseEvent<SVGSVGElement>) => {
+    if (!svgRef.current) return;
+    
+    const svgRect = svgRef.current.getBoundingClientRect();
+    const scaleX = 600 / svgRect.width;
+    const scaleY = 700 / svgRect.height;
+    
+    const mouseX = (e.clientX - svgRect.left) * scaleX;
+    const mouseY = (e.clientY - svgRect.top) * scaleY;
+    
+    // Only show zoom lens when hovering over the Chaithya structure
+    const isOverChaithya = chaithyaSections.some(section => {
+      if (section.name === 'triangle-top') {
+        const triangleY = mouseY - section.y;
+        const triangleProgress = triangleY / section.height;
+        const triangleWidthAtY = section.width * triangleProgress;
+        const triangleStartX = section.x + (section.width - triangleWidthAtY) / 2;
+        const triangleEndX = triangleStartX + triangleWidthAtY;
+        return mouseX >= triangleStartX && mouseX <= triangleEndX && 
+               mouseY >= section.y && mouseY <= section.y + section.height;
+      } else if (section.name === 'dome') {
+        const centerX = section.x + section.width / 2;
+        const centerY = section.y + section.height;
+        const radius = section.width / 2;
+        const distanceFromCenter = Math.sqrt(
+          Math.pow(mouseX - centerX, 2) + Math.pow(mouseY - centerY, 2)
+        );
+        return distanceFromCenter <= radius && mouseY <= centerY;
+      } else {
+        return mouseX >= section.x && mouseX <= section.x + section.width &&
+               mouseY >= section.y && mouseY <= section.y + section.height;
+      }
+    });
+    
+    if (isOverChaithya) {
+      setZoomLens({
+        visible: true,
+        x: e.clientX,
+        y: e.clientY,
+        centerX: mouseX,
+        centerY: mouseY,
+      });
+    } else {
+      setZoomLens(prev => ({ ...prev, visible: false }));
+    }
+  };
+
+  const handleMouseLeave = () => {
+    setZoomLens(prev => ({ ...prev, visible: false }));
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-orange-50 to-amber-50 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -145,6 +210,7 @@ export default function DonatePage() {
             <div className="bg-white rounded-2xl shadow-2xl p-4 sm:p-8 relative overflow-hidden mb-8">
               <div className="relative h-[400px] sm:h-[500px] lg:h-[700px] mx-auto w-full max-w-[600px]">
                 <svg
+                  ref={svgRef}
                   key={`svg-${cart.length}`} // Force re-render when cart changes
                   width="100%"
                   height="100%"
@@ -157,6 +223,8 @@ export default function DonatePage() {
                     WebkitUserSelect: 'none',
                     WebkitTouchCallout: 'none'
                   }}
+                  onMouseMove={handleMouseMove}
+                  onMouseLeave={handleMouseLeave}
                 >
                   {/* Background gradient */}
                   <defs>
@@ -281,6 +349,172 @@ export default function DonatePage() {
                     </g>
                   ))}
                 </svg>
+                
+                {/* Zoom Lens */}
+                {zoomLens.visible && (
+                  <div
+                    className="fixed pointer-events-none z-50 transition-all duration-150 ease-out"
+                    style={{
+                      left: zoomLens.x - 100,
+                      top: zoomLens.y - 100,
+                      width: 200,
+                      height: 200,
+                      transform: 'translate3d(0, 0, 0)', // Hardware acceleration
+                    }}
+                  >
+                    <div className="relative w-full h-full">
+                      {/* Outer ring shadow */}
+                      <div className="absolute inset-0 rounded-full bg-black/20 blur-md scale-110"></div>
+                      
+                      {/* Main lens container */}
+                      <div className="absolute inset-2 rounded-full border-4 border-amber-400 shadow-2xl bg-white overflow-hidden backdrop-blur-sm">
+                        {/* Lens content */}
+                        <div className="relative w-full h-full rounded-full overflow-hidden">
+                          <svg
+                            width="100%"
+                            height="100%"
+                            viewBox={`${zoomLens.centerX - 50} ${zoomLens.centerY - 50} 100 100`}
+                            className="w-full h-full"
+                            preserveAspectRatio="xMidYMid meet"
+                          >
+                            {/* Enhanced background for zoom lens */}
+                            <defs>
+                              <radialGradient id="zoomBg" cx="50%" cy="50%" r="50%">
+                                <stop offset="0%" stopColor="#fef3c7" />
+                                <stop offset="100%" stopColor="#f59e0b" />
+                              </radialGradient>
+                              
+                              {/* Enhanced brick texture pattern */}
+                              <pattern id="brickTexture" patternUnits="userSpaceOnUse" width="6" height="6">
+                                <rect width="6" height="6" fill="rgba(245, 158, 11, 0.05)"/>
+                                <circle cx="3" cy="3" r="0.8" fill="rgba(0,0,0,0.08)"/>
+                                <rect x="1.5" y="1.5" width="3" height="3" fill="none" stroke="rgba(0,0,0,0.04)" strokeWidth="0.3"/>
+                                <circle cx="1" cy="1" r="0.3" fill="rgba(0,0,0,0.03)"/>
+                                <circle cx="5" cy="5" r="0.3" fill="rgba(0,0,0,0.03)"/>
+                              </pattern>
+                              
+                              {/* Mortar pattern for realistic brick look */}
+                              <pattern id="mortarPattern" patternUnits="userSpaceOnUse" width="20" height="12">
+                                <rect width="20" height="12" fill="rgba(139, 69, 19, 0.1)"/>
+                                <rect x="0" y="0" width="20" height="1" fill="rgba(139, 69, 19, 0.2)"/>
+                                <rect x="0" y="11" width="20" height="1" fill="rgba(139, 69, 19, 0.2)"/>
+                                <rect x="0" y="0" width="1" height="12" fill="rgba(139, 69, 19, 0.15)"/>
+                                <rect x="10" y="0" width="1" height="12" fill="rgba(139, 69, 19, 0.15)"/>
+                              </pattern>
+                            </defs>
+                            
+                            <rect 
+                              x={zoomLens.centerX - 50} 
+                              y={zoomLens.centerY - 50} 
+                              width="100" 
+                              height="100" 
+                              fill="url(#zoomBg)" 
+                              opacity="0.1" 
+                            />
+
+                            {/* Render all bricks in the zoom area with enhanced detail */}
+                            {allBricks
+                              .filter(brick => {
+                                const brickCenterX = brick.x + brick.width / 2;
+                                const brickCenterY = brick.y + brick.height / 2;
+                                const distance = Math.sqrt(
+                                  Math.pow(brickCenterX - zoomLens.centerX, 2) + 
+                                  Math.pow(brickCenterY - zoomLens.centerY, 2)
+                                );
+                                return distance <= 60;
+                              })
+                              .map((brick) => {
+                                const isInCart = isBrickInCart(brick.id);
+                                let fillColor = '#f59e0b';
+                                let strokeColor = '#d97706';
+                                
+                                if (brick.donated) {
+                                  fillColor = '#10b981';
+                                  strokeColor = '#059669';
+                                } else if (isInCart) {
+                                  fillColor = '#3b82f6';
+                                  strokeColor = '#1d4ed8';
+                                }
+                                
+                                return (
+                                  <g key={`zoom-${brick.id}`}>
+                                    {/* Brick shadow */}
+                                    <rect
+                                      x={brick.x + 0.5}
+                                      y={brick.y + 0.5}
+                                      width={brick.width}
+                                      height={brick.height}
+                                      fill="rgba(0,0,0,0.2)"
+                                      rx="2"
+                                    />
+                                    {/* Main brick */}
+                                    <rect
+                                      x={brick.x}
+                                      y={brick.y}
+                                      width={brick.width}
+                                      height={brick.height}
+                                      fill={fillColor}
+                                      stroke={strokeColor}
+                                      strokeWidth="1.5"
+                                      rx="2"
+                                    />
+                                    {/* Brick highlight */}
+                                    <rect
+                                      x={brick.x + 1}
+                                      y={brick.y + 1}
+                                      width={brick.width - 2}
+                                      height="2"
+                                      fill="rgba(255,255,255,0.3)"
+                                      rx="1"
+                                    />
+                                  </g>
+                                );
+                              })}
+
+                            {/* Add realistic texture overlay */}
+                            <rect 
+                              x={zoomLens.centerX - 50} 
+                              y={zoomLens.centerY - 50} 
+                              width="100" 
+                              height="100" 
+                              fill="url(#brickTexture)" 
+                              opacity="0.4"
+                            />
+                            
+                            {/* Add mortar pattern overlay */}
+                            <rect 
+                              x={zoomLens.centerX - 50} 
+                              y={zoomLens.centerY - 50} 
+                              width="100" 
+                              height="100" 
+                              fill="url(#mortarPattern)" 
+                              opacity="0.2"
+                            />
+                          </svg>
+                        </div>
+                      </div>
+                      
+                      {/* Lens glass effect - multiple layers for realism */}
+                      <div className="absolute inset-3 rounded-full bg-gradient-to-br from-white/40 via-transparent to-transparent pointer-events-none"></div>
+                      <div className="absolute inset-4 rounded-full bg-gradient-to-tl from-transparent via-white/20 to-white/30 pointer-events-none"></div>
+                      
+                      {/* Lens frame reflection */}
+                      <div className="absolute inset-2 rounded-full border-2 border-gradient-to-br from-amber-300 to-amber-600"></div>
+                      
+                      {/* Center crosshair with enhanced visibility */}
+                      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-4 h-4">
+                        <div className="absolute top-1/2 left-1 right-1 h-0.5 bg-amber-600 transform -translate-y-1/2 rounded-full shadow-sm"></div>
+                        <div className="absolute left-1/2 top-1 bottom-1 w-0.5 bg-amber-600 transform -translate-x-1/2 rounded-full shadow-sm"></div>
+                        <div className="absolute top-1/2 left-1/2 w-1 h-1 bg-amber-700 transform -translate-x-1/2 -translate-y-1/2 rounded-full"></div>
+                      </div>
+                      
+                      {/* Zoom indicator */}
+                      <div className="absolute bottom-1 right-2 text-xs font-bold text-amber-700 bg-white/80 px-1 py-0.5 rounded backdrop-blur-sm">
+                        2.5x
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
               
               {/* Legend */}
