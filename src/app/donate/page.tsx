@@ -92,10 +92,10 @@ export default function DonatePage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-5xl font-bold text-amber-800 mb-4">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-amber-800 mb-4">
             🙏 Build the Sacred Chaithya 🙏
           </h1>
-          <p className="text-lg text-amber-700 max-w-3xl mx-auto">
+          <p className="text-base sm:text-lg text-amber-700 max-w-3xl mx-auto px-4">
             Join us in building this sacred stupa brick by brick. Each brick represents your contribution to spreading peace, wisdom, and compassion. Hover over different sections to explore and click on individual bricks to sponsor them.
           </p>
         </div>
@@ -104,13 +104,14 @@ export default function DonatePage() {
           {/* Main Content Area */}
           <div className="flex-1">
             {/* Chaithya Visualization */}
-            <div className="bg-white rounded-2xl shadow-2xl p-8 relative overflow-hidden mb-8">
-              <div className="relative h-[700px] mx-auto" style={{ width: '600px' }}>
+            <div className="bg-white rounded-2xl shadow-2xl p-4 sm:p-8 relative overflow-hidden mb-8">
+              <div className="relative h-[400px] sm:h-[500px] lg:h-[700px] mx-auto w-full max-w-[600px]">
                 <svg
-                  width="600"
-                  height="700"
+                  width="100%"
+                  height="100%"
                   viewBox="0 0 600 700"
                   className="absolute inset-0"
+                  preserveAspectRatio="xMidYMid meet"
                 >
                   {/* Background gradient */}
                   <defs>
@@ -199,9 +200,9 @@ export default function DonatePage() {
             </div>
 
             {/* Section Info */}
-            <div className="bg-white rounded-xl shadow-lg p-6">
-              <h3 className="text-xl font-bold text-gray-800 mb-4">Sacred Sections</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-800 mb-4">Sacred Sections</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {chaithyaSections.map((section) => {
                   const donatedCount = allBricks.filter(b => b.section === section.name && b.donated).length;
                   const totalCount = allBricks.filter(b => b.section === section.name).length;
@@ -235,9 +236,9 @@ export default function DonatePage() {
 
           {/* Cart Sidebar */}
           <div className="lg:w-80 w-full">
-            <div className="bg-white rounded-xl shadow-lg p-6 sticky top-8">
+            <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 lg:sticky lg:top-8">
               <div className="flex justify-between items-center mb-6">
-                <h3 className="text-2xl font-bold text-gray-800">🛒 Your Cart</h3>
+                <h3 className="text-xl sm:text-2xl font-bold text-gray-800">🛒 Your Cart</h3>
                 <span className="bg-amber-500 text-white rounded-full px-3 py-1 text-sm font-bold">
                   {cart.length}
                 </span>
