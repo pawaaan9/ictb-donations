@@ -68,15 +68,25 @@ export default function DonatePage() {
 
   const handleBrickClick = (brick: Brick) => {
     if (!brick.donated) {
-      // Directly add to cart without modal
-      setCart(prev => [...prev, { brick }]);
-      // Mark brick as donated in the UI (optional - for visual feedback)
-      brick.donated = true;
+      // Check if brick is already in cart
+      const isInCart = cart.some(item => item.brick.id === brick.id);
+      
+      if (isInCart) {
+        // Remove from cart if already there
+        setCart(prev => prev.filter(item => item.brick.id !== brick.id));
+      } else {
+        // Add to cart
+        setCart(prev => [...prev, { brick }]);
+      }
     }
   };
 
   const removeFromCart = (brickId: string) => {
     setCart(prev => prev.filter(item => item.brick.id !== brickId));
+  };
+
+  const isBrickInCart = (brickId: string) => {
+    return cart.some(item => item.brick.id === brickId);
   };
 
   const getTotalAmount = () => {
@@ -146,25 +156,39 @@ export default function DonatePage() {
                       {/* Render bricks for this section */}
                       {allBricks
                         .filter(brick => brick.section === section.name)
-                        .map((brick) => (
-                          <rect
-                            key={brick.id}
-                            x={brick.x}
-                            y={brick.y}
-                            width={brick.width}
-                            height={brick.height}
-                            fill={brick.donated ? '#10b981' : '#f59e0b'}
-                            stroke={brick.donated ? '#059669' : '#d97706'}
-                            strokeWidth="1"
-                            rx="2"
-                            className={`transition-all duration-200 ${
-                              brick.donated 
-                                ? 'cursor-not-allowed opacity-60' 
-                                : 'cursor-pointer hover:fill-amber-400 hover:stroke-amber-600'
-                            }`}
-                            onClick={() => handleBrickClick(brick)}
-                          />
-                        ))}
+                        .map((brick) => {
+                          const isInCart = isBrickInCart(brick.id);
+                          let fillColor = '#f59e0b'; // Default amber for available
+                          let strokeColor = '#d97706';
+                          
+                          if (brick.donated) {
+                            fillColor = '#10b981'; // Green for donated
+                            strokeColor = '#059669';
+                          } else if (isInCart) {
+                            fillColor = '#3b82f6'; // Blue for in cart
+                            strokeColor = '#1d4ed8';
+                          }
+                          
+                          return (
+                            <rect
+                              key={brick.id}
+                              x={brick.x}
+                              y={brick.y}
+                              width={brick.width}
+                              height={brick.height}
+                              fill={fillColor}
+                              stroke={strokeColor}
+                              strokeWidth="1"
+                              rx="2"
+                              className={`transition-all duration-200 ${
+                                brick.donated 
+                                  ? 'cursor-not-allowed opacity-60' 
+                                  : 'cursor-pointer hover:opacity-80'
+                              }`}
+                              onClick={() => handleBrickClick(brick)}
+                            />
+                          );
+                        })}
                       
                       {/* Section label */}
                       <text
@@ -186,14 +210,18 @@ export default function DonatePage() {
               {/* Legend */}
               <div className="mt-6 bg-gray-50 rounded-lg p-4">
                 <h3 className="font-semibold text-gray-800 mb-3 text-center">Legend</h3>
-                <div className="flex justify-center space-x-8">
+                <div className="flex justify-center space-x-4 flex-wrap gap-2">
                   <div className="flex items-center space-x-2">
                     <div className="w-4 h-3 bg-amber-500 border border-amber-600 rounded-sm"></div>
-                    <span className="text-gray-700">Available Brick</span>
+                    <span className="text-gray-700 text-sm">Available</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <div className="w-4 h-3 bg-blue-500 border border-blue-600 rounded-sm"></div>
+                    <span className="text-gray-700 text-sm">In Cart</span>
                   </div>
                   <div className="flex items-center space-x-2">
                     <div className="w-4 h-3 bg-green-500 border border-green-600 rounded-sm"></div>
-                    <span className="text-gray-700">Donated Brick</span>
+                    <span className="text-gray-700 text-sm">Donated</span>
                   </div>
                 </div>
               </div>
