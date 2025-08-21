@@ -279,7 +279,22 @@ export default function DonatePage() {
                       
                       {/* Render bricks for this section - only when hovered */}
                       {hoveredSection === section.name && allBricks
-                        .filter(brick => brick.section === section.name)
+                        .filter(brick => {
+                          if (brick.section !== section.name) return false;
+                          
+                          // If zoom lens is visible, only show bricks within the zoom area
+                          if (zoomLens.visible) {
+                            const brickCenterX = brick.x + brick.width / 2;
+                            const brickCenterY = brick.y + brick.height / 2;
+                            const distance = Math.sqrt(
+                              Math.pow(brickCenterX - zoomLens.centerX, 2) + 
+                              Math.pow(brickCenterY - zoomLens.centerY, 2)
+                            );
+                            return distance <= 60;
+                          }
+                          
+                          return true;
+                        })
                         .map((brick) => {
                           const isInCart = isBrickInCart(brick.id);
                           let fillColor = '#f59e0b'; // Default amber for available
@@ -421,7 +436,41 @@ export default function DonatePage() {
                                   Math.pow(brickCenterX - zoomLens.centerX, 2) + 
                                   Math.pow(brickCenterY - zoomLens.centerY, 2)
                                 );
-                                return distance <= 60;
+                                
+                                // Only show bricks within zoom radius AND within valid chaithya structure
+                                if (distance > 60) return false;
+                                
+                                // Find which section this brick belongs to and validate it's within that section's shape
+                                const section = chaithyaSections.find(s => s.name === brick.section);
+                                if (!section) return false;
+                                
+                                // Apply the same shape validation logic used in generateBricks
+                                if (section.name === 'triangle-top') {
+                                  // Triangle shape: narrower at top, wider at bottom
+                                  const triangleY = brick.y - section.y;
+                                  const triangleProgress = triangleY / section.height;
+                                  const triangleWidthAtY = section.width * triangleProgress;
+                                  const triangleStartX = section.x + (section.width - triangleWidthAtY) / 2;
+                                  const triangleEndX = triangleStartX + triangleWidthAtY;
+                                  
+                                  return brick.x >= triangleStartX && brick.x + brick.width <= triangleEndX;
+                                } else if (section.name === 'dome') {
+                                  // Half-circle dome shape
+                                  const centerX = section.x + section.width / 2;
+                                  const centerY = section.y + section.height;
+                                  const radius = section.width / 2;
+                                  
+                                  // Check if brick center is within the dome
+                                  const distanceFromDomeCenter = Math.sqrt(
+                                    Math.pow(brickCenterX - centerX, 2) + Math.pow(brickCenterY - centerY, 2)
+                                  );
+                                  return distanceFromDomeCenter <= radius && brickCenterY <= centerY;
+                                } else {
+                                  // Rectangle shapes (upper-rectangle and base-rectangle)
+                                  return brick.x + brick.width <= section.x + section.width && 
+                                         brick.y + brick.height <= section.y + section.height &&
+                                         brick.x >= section.x && brick.y >= section.y;
+                                }
                               })
                               .map((brick) => {
                                 const isInCart = isBrickInCart(brick.id);
