@@ -313,7 +313,7 @@ export default function DonatePage() {
                   </div>
                   
                   <button className="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold py-4 px-4 rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg">
-                    🙏 Complete Sacred Donation 🙏
+                    Complete Sacred Donation 🙏
                   </button>
                   
                   <div className="mt-3 text-center">
