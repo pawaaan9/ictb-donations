@@ -208,7 +208,7 @@ export default function DonatePage() {
           <div className="flex-1">
             {/* Chaithya Visualization */}
             <div className="bg-white rounded-2xl shadow-2xl p-4 sm:p-8 relative overflow-hidden mb-8">
-              <div className="relative h-[400px] sm:h-[500px] lg:h-[700px] mx-auto w-full max-w-[600px]">
+              <div className="relative h-[400px] sm:h-[500px] lg:h-[700px] mx-auto w-full max-w-[600px] ">
                 <svg
                   ref={svgRef}
                   key={`svg-${cart.length}`} // Force re-render when cart changes
@@ -567,7 +567,7 @@ export default function DonatePage() {
               </div>
               
               {/* Legend */}
-              <div className="mt-6 bg-gray-50 rounded-lg p-4">
+              <div className="mt-1 bg-gray-50 rounded-lg p-4">
                 <h3 className="font-semibold text-gray-800 mb-3 text-center">Legend</h3>
                 <div className="flex justify-center space-x-4 flex-wrap gap-2">
                   <div className="flex items-center space-x-2">
