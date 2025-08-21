@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { default as NextImage } from "next/image";
 
 export default function Home() {
   return (
@@ -10,7 +10,7 @@ export default function Home() {
             Explore Theravada Cannon. Discover Inner Peace. Realise Nonexistence.
           </h1>
           <p className="text-xl md:text-2xl mb-8 max-w-4xl mx-auto italic">
-            "Admonition of all Lord Buddhas is to refrain from all sins, to generate merits, and to control one's mind."
+            &ldquo;Admonition of all Lord Buddhas is to refrain from all sins, to generate merits, and to control one&rsquo;s mind.&rdquo;
           </p>
           <div className="flex gap-4 justify-center flex-col sm:flex-row">
             <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-8 rounded-full transition-colors">

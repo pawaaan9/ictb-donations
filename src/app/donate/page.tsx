@@ -20,7 +20,6 @@ interface CartItem {
 export default function DonatePage() {
   const [hoveredSection, setHoveredSection] = useState<string | null>(null);
   const [cart, setCart] = useState<CartItem[]>([]);
-  const [showCart, setShowCart] = useState(false);
 
   // Define the Chaithya structure with different sections
   const chaithyaSections = [
@@ -32,7 +31,7 @@ export default function DonatePage() {
   ];
 
   // Generate bricks for each section
-  const generateBricks = useCallback((section: any): Brick[] => {
+  const generateBricks = useCallback((section: { name: string; x: number; y: number; width: number; height: number; brickCount: number; price: number }): Brick[] => {
     const bricks: Brick[] = [];
     const brickWidth = 20;
     const brickHeight = 12;
