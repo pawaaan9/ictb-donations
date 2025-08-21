@@ -21,13 +21,12 @@ export default function DonatePage() {
   const [hoveredSection, setHoveredSection] = useState<string | null>(null);
   const [cart, setCart] = useState<CartItem[]>([]);
 
-  // Define the Chaithya structure with different sections
+  // Define the Chaithya structure with four stacked parts
   const chaithyaSections = [
-    { name: 'spire', x: 200, y: 50, width: 200, height: 150, brickCount: 24, price: 1000 },
-    { name: 'dome', x: 150, y: 200, width: 300, height: 200, brickCount: 60, price: 1000 },
-    { name: 'harmika', x: 175, y: 180, width: 250, height: 40, brickCount: 20, price: 1000 },
-    { name: 'drum', x: 100, y: 400, width: 400, height: 150, brickCount: 80, price: 1000 },
-    { name: 'base', x: 50, y: 550, width: 500, height: 100, brickCount: 100, price: 1000 },
+    { name: 'triangle-top', x: 260, y: 50, width: 80, height: 80, brickCount: 15, price: 1000 },
+    { name: 'dome', x: 100, y: -60, width: 400, height: 400, brickCount: 60, price: 1000 },
+    { name: 'upper-rectangle', x: 75, y: 340, width: 450, height: 50, brickCount: 30, price: 1000 },
+    { name: 'base-rectangle', x: 50, y: 390, width: 500, height: 50, brickCount: 60, price: 1000 },
   ];
 
   // Generate bricks for each section
@@ -45,9 +44,38 @@ export default function DonatePage() {
         const x = section.x + col * brickWidth + offsetX;
         const y = section.y + row * brickHeight;
         
-        // Only add bricks that fit within the section bounds
-        if (x + brickWidth <= section.x + section.width && 
-            y + brickHeight <= section.y + section.height) {
+        let shouldIncludeBrick = false;
+        
+        // Different shape logic for each section
+        if (section.name === 'triangle-top') {
+          // Triangle shape: narrower at top, wider at bottom
+          const triangleY = y - section.y;
+          const triangleProgress = triangleY / section.height; // 0 at top, 1 at bottom
+          const triangleWidthAtY = section.width * triangleProgress;
+          const triangleStartX = section.x + (section.width - triangleWidthAtY) / 2;
+          const triangleEndX = triangleStartX + triangleWidthAtY;
+          
+          shouldIncludeBrick = x >= triangleStartX && x + brickWidth <= triangleEndX;
+        } else if (section.name === 'dome') {
+          // Half-circle dome shape
+          const centerX = section.x + section.width / 2;
+          const centerY = section.y + section.height; // Bottom of the dome
+          const radius = section.width / 2;
+          const brickCenterX = x + brickWidth / 2;
+          const brickCenterY = y + brickHeight / 2;
+          
+          // Check if brick center is within the dome (above the diameter line)
+          const distanceFromCenter = Math.sqrt(
+            Math.pow(brickCenterX - centerX, 2) + Math.pow(brickCenterY - centerY, 2)
+          );
+          shouldIncludeBrick = distanceFromCenter <= radius && brickCenterY <= centerY;
+        } else {
+          // Rectangle shapes (upper-rectangle and base-rectangle)
+          shouldIncludeBrick = x + brickWidth <= section.x + section.width && 
+                              y + brickHeight <= section.y + section.height;
+        }
+        
+        if (shouldIncludeBrick) {
           bricks.push({
             id: `${section.name}-${row}-${col}`,
             x,
@@ -147,21 +175,42 @@ export default function DonatePage() {
                       onMouseEnter={() => setHoveredSection(section.name)}
                       onMouseLeave={() => setHoveredSection(null)}
                     >
-                      {/* Section background */}
-                      <rect
-                        x={section.x}
-                        y={section.y}
-                        width={section.width}
-                        height={section.height}
-                        fill="rgba(251, 191, 36, 0.1)"
-                        stroke="rgba(251, 191, 36, 0.3)"
-                        strokeWidth="2"
-                        rx="8"
-                        className="transition-all duration-300"
-                      />
+                      {/* Section background - different shape for each part */}
+                      {section.name === 'triangle-top' ? (
+                        <polygon
+                          points={`${section.x + section.width/2},${section.y} ${section.x},${section.y + section.height} ${section.x + section.width},${section.y + section.height}`}
+                          fill="rgba(251, 191, 36, 0.1)"
+                          stroke="rgba(251, 191, 36, 0.3)"
+                          strokeWidth="2"
+                          className="transition-all duration-300"
+                        />
+                      ) : section.name === 'dome' ? (
+                        <path
+                          d={`M ${section.x} ${section.y + section.height} 
+                              Q ${section.x + section.width/2} ${section.y} 
+                              ${section.x + section.width} ${section.y + section.height} 
+                              Z`}
+                          fill="rgba(251, 191, 36, 0.1)"
+                          stroke="rgba(251, 191, 36, 0.3)"
+                          strokeWidth="2"
+                          className="transition-all duration-300"
+                        />
+                      ) : (
+                        <rect
+                          x={section.x}
+                          y={section.y}
+                          width={section.width}
+                          height={section.height}
+                          fill="rgba(251, 191, 36, 0.1)"
+                          stroke="rgba(251, 191, 36, 0.3)"
+                          strokeWidth="2"
+                          rx="4"
+                          className="transition-all duration-300"
+                        />
+                      )}
                       
-                      {/* Render bricks for this section */}
-                      {allBricks
+                      {/* Render bricks for this section - only when hovered */}
+                      {hoveredSection === section.name && allBricks
                         .filter(brick => brick.section === section.name)
                         .map((brick) => {
                           const isInCart = isBrickInCart(brick.id);
