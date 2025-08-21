@@ -117,11 +117,18 @@ export default function DonatePage() {
             <div className="bg-white rounded-2xl shadow-2xl p-4 sm:p-8 relative overflow-hidden mb-8">
               <div className="relative h-[400px] sm:h-[500px] lg:h-[700px] mx-auto w-full max-w-[600px]">
                 <svg
+                  key={`svg-${cart.length}`} // Force re-render when cart changes
                   width="100%"
                   height="100%"
                   viewBox="0 0 600 700"
                   className="absolute inset-0"
                   preserveAspectRatio="xMidYMid meet"
+                  style={{
+                    touchAction: 'manipulation',
+                    userSelect: 'none',
+                    WebkitUserSelect: 'none',
+                    WebkitTouchCallout: 'none'
+                  }}
                 >
                   {/* Background gradient */}
                   <defs>
@@ -171,7 +178,7 @@ export default function DonatePage() {
                           
                           return (
                             <rect
-                              key={brick.id}
+                              key={`${brick.id}-${isInCart ? 'cart' : 'available'}`} // Force re-render on cart change
                               x={brick.x}
                               y={brick.y}
                               width={brick.width}
@@ -185,7 +192,27 @@ export default function DonatePage() {
                                   ? 'cursor-not-allowed opacity-60' 
                                   : 'cursor-pointer hover:opacity-80'
                               }`}
-                              onClick={() => handleBrickClick(brick)}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                handleBrickClick(brick);
+                              }}
+                              onTouchStart={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                              }}
+                              onTouchEnd={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                handleBrickClick(brick);
+                              }}
+                              style={{
+                                touchAction: 'manipulation',
+                                WebkitTapHighlightColor: 'transparent',
+                                // Force hardware acceleration on mobile
+                                transform: 'translateZ(0)',
+                                backfaceVisibility: 'hidden'
+                              }}
                             />
                           );
                         })}
