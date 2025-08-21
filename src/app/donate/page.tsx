@@ -233,7 +233,7 @@ export default function DonatePage() {
                       <stop offset="100%" stopColor="#f59e0b" />
                     </radialGradient>
                   </defs>
-                  <rect width="600" height="700" fill="url(#bg)" opacity="0.1" />
+                  <rect width="600" height="550" fill="url(#bg)" opacity="0.1" />
 
                   {/* Render each section */}
                   {chaithyaSections.map((section) => (
@@ -559,7 +559,7 @@ export default function DonatePage() {
                       
                       {/* Zoom indicator */}
                       <div className="absolute bottom-1 right-2 text-xs font-bold text-amber-700 bg-white/80 px-1 py-0.5 rounded backdrop-blur-sm">
-                        2.5x
+                        {/* 2.5x */}
                       </div>
                     </div>
                   </div>
