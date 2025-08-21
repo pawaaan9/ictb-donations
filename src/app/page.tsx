@@ -24,7 +24,7 @@ export default function Home() {
       </section>
 
       {/* Main Content Section */}
-      <section className="py-16 bg-gray-50 dark:bg-gray-900">
+      <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-orange-600 mb-8">
@@ -36,7 +36,7 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
             {/* ICTB Programs */}
-            <div className="text-center p-8 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
+            <div className="text-center p-8 bg-white rounded-lg shadow-lg">
               <div className="w-20 h-20 mx-auto mb-6">
                 <svg viewBox="0 0 100 100" className="w-full h-full text-orange-500">
                   <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" strokeWidth="3"/>
@@ -54,7 +54,7 @@ export default function Home() {
                 </svg>
               </div>
               <h3 className="text-xl font-bold text-purple-600 mb-4">ICTB Programs</h3>
-              <p className="text-gray-600 dark:text-gray-300 mb-6">
+              <p className="text-gray-600 mb-6">
                 Our diverse range of programs is designed to support our mission of promoting peace, mindfulness, and community well-being. Here,
               </p>
               <button className="bg-orange-600 hover:bg-orange-700 text-white py-2 px-6 rounded font-medium">
@@ -63,7 +63,7 @@ export default function Home() {
             </div>
 
             {/* Our Partners */}
-            <div className="text-center p-8 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
+            <div className="text-center p-8 bg-white rounded-lg shadow-lg">
               <div className="w-20 h-20 mx-auto mb-6">
                 <svg viewBox="0 0 100 100" className="w-full h-full text-orange-500">
                   <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" strokeWidth="3"/>
@@ -81,7 +81,7 @@ export default function Home() {
                 </svg>
               </div>
               <h3 className="text-xl font-bold text-purple-600 mb-4">Our Partners</h3>
-              <p className="text-gray-600 dark:text-gray-300 mb-6">
+              <p className="text-gray-600 mb-6">
                 At the International Centre for Theravada Buddhism (ICTB), we are proud to collaborate with esteemed organizations from around the world.
               </p>
               <button className="bg-orange-600 hover:bg-orange-700 text-white py-2 px-6 rounded font-medium">
@@ -90,7 +90,7 @@ export default function Home() {
             </div>
 
             {/* Donations */}
-            <div className="text-center p-8 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
+            <div className="text-center p-8 bg-white rounded-lg shadow-lg">
               <div className="w-20 h-20 mx-auto mb-6">
                 <svg viewBox="0 0 100 100" className="w-full h-full text-orange-500">
                   <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" strokeWidth="3"/>
@@ -108,7 +108,7 @@ export default function Home() {
                 </svg>
               </div>
               <h3 className="text-xl font-bold text-purple-600 mb-4">Donations</h3>
-              <p className="text-gray-600 dark:text-gray-300 mb-6">
+              <p className="text-gray-600 mb-6">
                 Your generosity is crucial in helping the International Centre for Theravada Buddhism (ICTB) expand and develop its presence in Australia.
               </p>
               <button className="bg-orange-600 hover:bg-orange-700 text-white py-2 px-6 rounded font-medium">
@@ -120,7 +120,7 @@ export default function Home() {
           {/* Second Row */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
             {/* Upcoming Events */}
-            <div className="text-center p-8 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
+            <div className="text-center p-8 bg-white rounded-lg shadow-lg">
               <div className="w-20 h-20 mx-auto mb-6">
                 <svg viewBox="0 0 100 100" className="w-full h-full text-orange-500">
                   <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" strokeWidth="3"/>
@@ -138,7 +138,7 @@ export default function Home() {
                 </svg>
               </div>
               <h3 className="text-xl font-bold text-purple-600 mb-4">Upcoming Events</h3>
-              <p className="text-gray-600 dark:text-gray-300 mb-6">
+              <p className="text-gray-600 mb-6">
                 At the International Centre for Theravada Buddhism (ICTB), we are committed to fostering a vibrant and engaged community through a diverse range of events.
               </p>
               <button className="bg-orange-600 hover:bg-orange-700 text-white py-2 px-6 rounded font-medium">
@@ -147,7 +147,7 @@ export default function Home() {
             </div>
 
             {/* Meditation Program */}
-            <div className="text-center p-8 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
+            <div className="text-center p-8 bg-white rounded-lg shadow-lg">
               <div className="w-20 h-20 mx-auto mb-6">
                 <svg viewBox="0 0 100 100" className="w-full h-full text-orange-500">
                   <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" strokeWidth="3"/>
@@ -165,7 +165,7 @@ export default function Home() {
                 </svg>
               </div>
               <h3 className="text-xl font-bold text-purple-600 mb-4">Meditation Program</h3>
-              <p className="text-gray-600 dark:text-gray-300 mb-6">
+              <p className="text-gray-600 mb-6">
                 At the International Centre for Theravada Buddhism (ICTB), our Meditation Program is at the heart of our mission to promote peace, mindfulness, and inner well-being.
               </p>
               <button className="bg-orange-600 hover:bg-orange-700 text-white py-2 px-6 rounded font-medium">
@@ -174,7 +174,7 @@ export default function Home() {
             </div>
 
             {/* Special Announcements */}
-            <div className="text-center p-8 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
+            <div className="text-center p-8 bg-white rounded-lg shadow-lg">
               <div className="w-20 h-20 mx-auto mb-6">
                 <svg viewBox="0 0 100 100" className="w-full h-full text-orange-500">
                   <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" strokeWidth="3"/>
@@ -192,7 +192,7 @@ export default function Home() {
                 </svg>
               </div>
               <h3 className="text-xl font-bold text-purple-600 mb-4">Special Announcements</h3>
-              <p className="text-gray-600 dark:text-gray-300 mb-6">
+              <p className="text-gray-600 mb-6">
                 We are thrilled to share a special announcement that marks a significant milestone for the International Centre for Theravada Buddhism (ICTB).
               </p>
               <button className="bg-orange-600 hover:bg-orange-700 text-white py-2 px-6 rounded font-medium">
@@ -202,7 +202,7 @@ export default function Home() {
           </div>
 
           {/* Buddha Quotes Section */}
-          <div className="text-center py-16 bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-700 rounded-lg">
+          <div className="text-center py-16 bg-gradient-to-r from-gray-100 to-gray-200 rounded-lg">
             <div className="w-20 h-20 mx-auto mb-6">
               <svg viewBox="0 0 100 100" className="w-full h-full text-orange-500">
                 <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" strokeWidth="3"/>
@@ -221,10 +221,10 @@ export default function Home() {
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-orange-600 mb-8">Buddha Quotes</h2>
             <div className="max-w-4xl mx-auto">
-              <p className="text-lg md:text-xl text-gray-700 dark:text-gray-300 italic mb-4">
+              <p className="text-lg md:text-xl text-gray-700 italic mb-4">
                 Conquer anger with non-anger. Conquer badness with goodness. Conquer meanness with generosity.
               </p>
-              <p className="text-lg md:text-xl text-gray-700 dark:text-gray-300 italic">
+              <p className="text-lg md:text-xl text-gray-700 italic">
                 Conquer dishonesty with truth
               </p>
             </div>

@@ -4,15 +4,15 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-gray-900 text-white">
+    <footer className="bg-gray-100 text-gray-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Company Info */}
           <div className="col-span-1 md:col-span-2">
-            <h3 className="text-2xl font-bold text-blue-400 mb-4">
+            <h3 className="text-2xl font-bold text-blue-600 mb-4">
               ICTB Donations
             </h3>
-            <p className="text-gray-300 mb-4 max-w-md">
+            <p className="text-gray-600 mb-4 max-w-md">
               Supporting communities and making a positive impact through your generous donations. 
               Together, we can create meaningful change in the world.
             </p>
@@ -20,7 +20,7 @@ const Footer = () => {
               {/* Social Media Icons */}
               <a
                 href="#"
-                className="text-gray-400 hover:text-blue-400 transition-colors"
+                className="text-gray-500 hover:text-blue-600 transition-colors"
                 aria-label="Facebook"
               >
                 <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
@@ -29,7 +29,7 @@ const Footer = () => {
               </a>
               <a
                 href="#"
-                className="text-gray-400 hover:text-blue-400 transition-colors"
+                className="text-gray-500 hover:text-blue-600 transition-colors"
                 aria-label="Twitter"
               >
                 <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
@@ -38,7 +38,7 @@ const Footer = () => {
               </a>
               <a
                 href="#"
-                className="text-gray-400 hover:text-blue-400 transition-colors"
+                className="text-gray-500 hover:text-blue-600 transition-colors"
                 aria-label="LinkedIn"
               >
                 <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
@@ -53,22 +53,22 @@ const Footer = () => {
             <h4 className="text-lg font-semibold mb-4">Quick Links</h4>
             <ul className="space-y-2">
               <li>
-                <Link href="/" className="text-gray-300 hover:text-blue-400 transition-colors">
+                <Link href="/" className="text-gray-600 hover:text-blue-600 transition-colors">
                   Home
                 </Link>
               </li>
               <li>
-                <Link href="/about" className="text-gray-300 hover:text-blue-400 transition-colors">
+                <Link href="/about" className="text-gray-600 hover:text-blue-600 transition-colors">
                   About Us
                 </Link>
               </li>
               <li>
-                <Link href="/donate" className="text-gray-300 hover:text-blue-400 transition-colors">
+                <Link href="/donate" className="text-gray-600 hover:text-blue-600 transition-colors">
                   Donate
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="text-gray-300 hover:text-blue-400 transition-colors">
+                <Link href="/contact" className="text-gray-600 hover:text-blue-600 transition-colors">
                   Contact
                 </Link>
               </li>
@@ -80,22 +80,22 @@ const Footer = () => {
             <h4 className="text-lg font-semibold mb-4">Support</h4>
             <ul className="space-y-2">
               <li>
-                <Link href="/privacy" className="text-gray-300 hover:text-blue-400 transition-colors">
+                <Link href="/privacy" className="text-gray-600 hover:text-blue-600 transition-colors">
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link href="/terms" className="text-gray-300 hover:text-blue-400 transition-colors">
+                <Link href="/terms" className="text-gray-600 hover:text-blue-600 transition-colors">
                   Terms of Service
                 </Link>
               </li>
               <li>
-                <Link href="/faq" className="text-gray-300 hover:text-blue-400 transition-colors">
+                <Link href="/faq" className="text-gray-600 hover:text-blue-600 transition-colors">
                   FAQ
                 </Link>
               </li>
               <li>
-                <Link href="/help" className="text-gray-300 hover:text-blue-400 transition-colors">
+                <Link href="/help" className="text-gray-600 hover:text-blue-600 transition-colors">
                   Help Center
                 </Link>
               </li>
@@ -104,14 +104,11 @@ const Footer = () => {
         </div>
 
         {/* Bottom Section */}
-        <div className="border-t border-gray-700 mt-8 pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-gray-300 text-sm">
+        <div className="border-t border-gray-300 mt-8 pt-8">
+          <div className="flex flex-col md:flex-row justify-center items-center">
+            <p className="text-gray-600 text-sm text-center">
               © {currentYear} ICTB Donations. All rights reserved.
             </p>
-            <div className="flex space-x-4 mt-4 md:mt-0">
-              <span className="text-gray-300 text-sm">Made with ❤️ for a better world</span>
-            </div>
           </div>
         </div>
       </div>
