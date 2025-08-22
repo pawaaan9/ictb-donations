@@ -51,13 +51,37 @@ export async function POST(request: NextRequest) {
       quantity: 1,
     }));
 
+    // Get the base URL for redirects
+    const getBaseUrl = () => {
+      // First try the environment variable
+      if (process.env.NEXT_PUBLIC_DOMAIN) {
+        return process.env.NEXT_PUBLIC_DOMAIN;
+      }
+      
+      // Fall back to request headers
+      const host = request.headers.get('host');
+      const protocol = request.headers.get('x-forwarded-proto') || 
+                      request.headers.get('x-forwarded-protocol') || 
+                      (host?.includes('localhost') ? 'http' : 'https');
+      
+      if (host) {
+        return `${protocol}://${host}`;
+      }
+      
+      // Final fallback (shouldn't happen in production)
+      return 'http://localhost:3000';
+    };
+
+    const baseUrl = getBaseUrl();
+    console.log('Using base URL for redirects:', baseUrl);
+
     // Create Stripe checkout session
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: lineItems,
       mode: 'payment',
-      success_url: `${process.env.NEXT_PUBLIC_DOMAIN}/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.NEXT_PUBLIC_DOMAIN}`,
+      success_url: `${baseUrl}/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${baseUrl}`,
       metadata: {
         ...metadata,
         totalBricks: items.length.toString(),

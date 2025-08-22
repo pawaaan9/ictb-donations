@@ -2,8 +2,8 @@
 export function validateEnvironmentVariables() {
   const requiredVars = {
     client: [
-      'NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY',
-      'NEXT_PUBLIC_DOMAIN'
+      'NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY'
+      // NEXT_PUBLIC_DOMAIN is optional as we have fallback logic
     ],
     server: [
       'STRIPE_SECRET_KEY',
@@ -28,6 +28,11 @@ export function validateEnvironmentVariables() {
         missing.push(varName);
       }
     });
+  }
+
+  // Check for NEXT_PUBLIC_DOMAIN specifically
+  if (!process.env.NEXT_PUBLIC_DOMAIN) {
+    warnings.push('NEXT_PUBLIC_DOMAIN not set - using request headers for URL detection');
   }
 
   // Check for test keys in production
