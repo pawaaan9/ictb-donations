@@ -208,6 +208,75 @@ export default function DonatePage() {
           <div className="flex-1">
             {/* Chaithya Visualization */}
             <div className="bg-white rounded-2xl shadow-2xl p-4 sm:p-8 relative overflow-hidden mb-8">
+              {/* Sacred Progress Summary - Inside Stupa Section */}
+              <div className="bg-gradient-to-r from-amber-50 to-orange-50 rounded-lg p-4 mb-6 border border-amber-200">
+                <div className="text-center mb-4">
+                  <h2 className="text-lg sm:text-xl font-bold text-amber-800 mb-1">
+                    🧱 Sacred Brick Progress
+                  </h2>
+                </div>
+                
+                <div className="grid grid-cols-3 gap-3">
+                  {/* Total Bricks */}
+                  <div className="bg-white rounded-lg p-3 shadow text-center">
+                    <div className="text-xl sm:text-2xl font-bold text-amber-600 mb-1">134,500</div>
+                    <div className="text-xs font-semibold text-gray-600 uppercase">Total</div>
+                  </div>
+                  
+                  {/* Sponsored Bricks */}
+                  <div className="bg-white rounded-lg p-3 shadow text-center">
+                    {(() => {
+                      const sponsoredCount = allBricks.filter(brick => brick.donated).length;
+                      return (
+                        <>
+                          <div className="text-xl sm:text-2xl font-bold text-green-600 mb-1">{sponsoredCount.toLocaleString()}</div>
+                          <div className="text-xs font-semibold text-gray-600 uppercase">Sponsored</div>
+                        </>
+                      );
+                    })()}
+                  </div>
+                  
+                  {/* Available Bricks */}
+                  <div className="bg-white rounded-lg p-3 shadow text-center">
+                    {(() => {
+                      const sponsoredCount = allBricks.filter(brick => brick.donated).length;
+                      const availableCount = 134500 - sponsoredCount;
+                      return (
+                        <>
+                          <div className="text-xl sm:text-2xl font-bold text-amber-600 mb-1">{availableCount.toLocaleString()}</div>
+                          <div className="text-xs font-semibold text-gray-600 uppercase">Available</div>
+                        </>
+                      );
+                    })()}
+                  </div>
+                </div>
+                
+                {/* Progress Bar */}
+                <div className="mt-4">
+                  {(() => {
+                    const sponsoredCount = allBricks.filter(brick => brick.donated).length;
+                    const progressPercentage = (sponsoredCount / 134500) * 100;
+                    return (
+                      <div className="bg-white rounded-full p-1 shadow-inner">
+                        <div className="relative">
+                          <div className="flex h-4 bg-gray-200 rounded-full overflow-hidden">
+                            <div 
+                              className="bg-gradient-to-r from-green-400 to-green-600 transition-all duration-1000 ease-out"
+                              style={{ width: `${progressPercentage}%` }}
+                            ></div>
+                          </div>
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <span className="text-xs font-bold text-gray-700">
+                              {progressPercentage.toFixed(2)}% Complete
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })()}
+                </div>
+              </div>
+
               <div className="relative h-[400px] sm:h-[500px] lg:h-[700px] mx-auto w-full max-w-[600px] ">
                 <svg
                   ref={svgRef}
