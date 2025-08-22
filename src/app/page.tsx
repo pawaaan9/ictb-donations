@@ -654,40 +654,6 @@ export default function DonatePage() {
                 </div>
               </div>
             </div>
-
-            {/* Section Info */}
-            <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6">
-              <h3 className="text-lg sm:text-xl font-bold text-gray-800 mb-4">Sacred Sections</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {chaithyaSections.map((section) => {
-                  const donatedCount = allBricks.filter(b => b.section === section.name && b.donated).length;
-                  const totalCount = allBricks.filter(b => b.section === section.name).length;
-                  const progress = (donatedCount / totalCount) * 100;
-                  
-                  return (
-                    <div key={section.name} className="border border-gray-200 rounded-lg p-4">
-                      <div className="flex justify-between items-center mb-2">
-                        <span className="font-medium text-gray-800 capitalize">
-                          {section.name}
-                        </span>
-                        <span className="text-sm text-amber-600 font-semibold">
-                          Rs.{section.price.toFixed(2)}
-                        </span>
-                      </div>
-                      <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
-                        <div 
-                          className="bg-green-500 h-2 rounded-full transition-all duration-500"
-                          style={{ width: `${progress}%` }}
-                        ></div>
-                      </div>
-                      <div className="text-xs text-gray-600">
-                        {donatedCount}/{totalCount} sponsored
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
           </div>
 
           {/* Cart Sidebar */}
