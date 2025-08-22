@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Navigation from "@/components/Navigation";
-import Footer from "@/components/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,7 +14,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "ICTB Donations - Making a Difference Together",
-  description: "Support communities and make a positive impact through your generous donations. Together, we can create meaningful change in the world.",
+  description:
+    "Support communities and make a positive impact through your generous donations. Together, we can create meaningful change in the world.",
 };
 
 export default function RootLayout({
@@ -30,11 +29,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <div className="min-h-screen flex flex-col">
-          <Navigation />
-          <main className="flex-grow">
-            {children}
-          </main>
-          <Footer />
+          <main className="flex-grow">{children}</main>
         </div>
       </body>
     </html>
