@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
+import { logEnvironmentStatus } from '@/lib/env-validation';
 
 function getStripe() {
   if (!process.env.STRIPE_SECRET_KEY) {
@@ -12,6 +13,19 @@ function getStripe() {
 
 export async function POST(request: NextRequest) {
   try {
+    // Log environment status for debugging
+    const envStatus = logEnvironmentStatus();
+    if (!envStatus.isValid) {
+      console.error('Environment validation failed:', envStatus.missing);
+      return NextResponse.json(
+        { 
+          error: 'Server configuration error: Missing environment variables',
+          details: process.env.NODE_ENV === 'development' ? envStatus.missing : undefined
+        },
+        { status: 500 }
+      );
+    }
+
     const stripe = getStripe();
     const { items, metadata = {} } = await request.json();
 

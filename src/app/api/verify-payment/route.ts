@@ -12,6 +12,15 @@ function getStripe() {
 
 export async function POST(request: NextRequest) {
   try {
+    // Check environment variables first
+    if (!process.env.STRIPE_SECRET_KEY) {
+      console.error('STRIPE_SECRET_KEY is not defined');
+      return NextResponse.json(
+        { error: 'Server configuration error: Stripe key missing' },
+        { status: 500 }
+      );
+    }
+
     const stripe = getStripe();
     const { sessionId } = await request.json();
 

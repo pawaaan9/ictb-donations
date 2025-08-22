@@ -239,6 +239,11 @@ export default function DonatePage() {
         body: JSON.stringify(paymentData),
       });
 
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+      }
+
       const { sessionId, error } = await response.json();
 
       if (error) {
@@ -248,7 +253,7 @@ export default function DonatePage() {
       // Redirect to Stripe Checkout
       const stripe = await stripePromise;
       if (!stripe) {
-        throw new Error('Stripe failed to load');
+        throw new Error('Stripe failed to load. Please check your configuration.');
       }
 
       const { error: stripeError } = await stripe.redirectToCheckout({

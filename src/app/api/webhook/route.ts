@@ -14,13 +14,30 @@ const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
 export async function POST(request: NextRequest) {
   try {
+    // Check environment variables first
+    if (!process.env.STRIPE_SECRET_KEY) {
+      console.error('STRIPE_SECRET_KEY is not defined');
+      return NextResponse.json(
+        { error: 'Server configuration error: Stripe key missing' },
+        { status: 500 }
+      );
+    }
+
+    if (!webhookSecret) {
+      console.error('STRIPE_WEBHOOK_SECRET is not defined');
+      return NextResponse.json(
+        { error: 'Server configuration error: Webhook secret missing' },
+        { status: 500 }
+      );
+    }
+
     const stripe = getStripe();
     const body = await request.text();
     const signature = request.headers.get('stripe-signature');
 
-    if (!signature || !webhookSecret) {
+    if (!signature) {
       return NextResponse.json(
-        { error: 'Webhook signature or secret missing' },
+        { error: 'Webhook signature missing' },
         { status: 400 }
       );
     }
