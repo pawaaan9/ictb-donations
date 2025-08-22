@@ -128,7 +128,40 @@ export default function DonatePage() {
     [sponsoredCount]
   );
 
-  const handleBrickClick = (brick: Brick) => {
+  const handleSvgClick = (e: React.MouseEvent<SVGSVGElement>) => {
+    if (!svgRef.current) return;
+    
+    // Prevent event from bubbling up
+    e.preventDefault();
+    e.stopPropagation();
+    
+    const svgRect = svgRef.current.getBoundingClientRect();
+    const scaleX = 600 / svgRect.width;
+    const scaleY = 700 / svgRect.height;
+    
+    const clickX = (e.clientX - svgRect.left) * scaleX;
+    const clickY = (e.clientY - svgRect.top) * scaleY;
+    
+    // Find the brick that was clicked by checking if click coordinates are within brick bounds
+    const clickedBrick = allBricks.find(brick => {
+      return clickX >= brick.x && 
+             clickX <= brick.x + brick.width && 
+             clickY >= brick.y && 
+             clickY <= brick.y + brick.height &&
+             hoveredSection === brick.section; // Only consider bricks in the currently hovered section
+    });
+    
+    if (clickedBrick) {
+      handleBrickClick(clickedBrick, e);
+    }
+  };
+
+  const handleBrickClick = (brick: Brick, event?: React.MouseEvent | React.TouchEvent) => {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    
     if (!brick.donated) {
       // Check if brick is already in cart
       const isInCart = cart.some(item => item.brick.id === brick.id);
@@ -353,6 +386,7 @@ export default function DonatePage() {
                   }}
                   onMouseMove={handleMouseMove}
                   onMouseLeave={handleMouseLeave}
+                  onClick={handleSvgClick}
                 >
                   {/* Background gradient */}
                   <defs>
@@ -367,9 +401,10 @@ export default function DonatePage() {
                   {chaithyaSections.map((section) => (
                     <g
                       key={section.name}
-                      className={`transition-transform duration-300 origin-center cursor-pointer ${getSectionZoom(section.name)}`}
+                      className={`transition-transform duration-300 origin-center ${getSectionZoom(section.name)}`}
                       onMouseEnter={() => setHoveredSection(section.name)}
                       onMouseLeave={() => setHoveredSection(null)}
+                      style={{ pointerEvents: 'auto' }}
                     >
                       {/* Section background - different shape for each part */}
                       {section.name === 'triangle-top' ? (
@@ -452,27 +487,20 @@ export default function DonatePage() {
                                   ? 'cursor-not-allowed opacity-60' 
                                   : 'cursor-pointer hover:opacity-80'
                               }`}
-                              onClick={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                handleBrickClick(brick);
-                              }}
-                              onTouchStart={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                              }}
-                              onTouchEnd={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                handleBrickClick(brick);
-                              }}
                               style={{
                                 touchAction: 'manipulation',
                                 WebkitTapHighlightColor: 'transparent',
                                 // Force hardware acceleration on mobile
                                 transform: 'translateZ(0)',
-                                backfaceVisibility: 'hidden'
+                                backfaceVisibility: 'hidden',
+                                // Ensure pointer events work correctly
+                                pointerEvents: brick.donated ? 'none' : 'all'
                               }}
+                              // Add data attributes for easier debugging
+                              data-brick-id={brick.id}
+                              data-brick-section={brick.section}
+                              data-brick-x={brick.x}
+                              data-brick-y={brick.y}
                             />
                           );
                         })}
