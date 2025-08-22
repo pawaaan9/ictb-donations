@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
+import { stripePromise } from '@/lib/stripe';
 
 interface Brick {
   id: string;
@@ -20,6 +21,7 @@ interface CartItem {
 export default function DonatePage() {
   const [hoveredSection, setHoveredSection] = useState<string | null>(null);
   const [cart, setCart] = useState<CartItem[]>([]);
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
   const [zoomLens, setZoomLens] = useState<{
     visible: boolean;
     x: number;
@@ -206,6 +208,62 @@ export default function DonatePage() {
 
   const handleMouseLeave = () => {
     setZoomLens(prev => ({ ...prev, visible: false }));
+  };
+
+  const handleCompletePayment = async () => {
+    if (cart.length === 0) return;
+
+    setIsProcessingPayment(true);
+
+    try {
+      // Prepare payment data
+      const paymentData = {
+        items: cart.map(item => ({
+          id: item.brick.id,
+          section: item.brick.section,
+          price: item.brick.price,
+        })),
+        metadata: {
+          donationType: 'chaithya_bricks',
+          totalBricks: cart.length.toString(),
+          timestamp: new Date().toISOString(),
+        },
+      };
+
+      // Create payment session
+      const response = await fetch('/api/create-payment-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(paymentData),
+      });
+
+      const { sessionId, error } = await response.json();
+
+      if (error) {
+        throw new Error(error);
+      }
+
+      // Redirect to Stripe Checkout
+      const stripe = await stripePromise;
+      if (!stripe) {
+        throw new Error('Stripe failed to load');
+      }
+
+      const { error: stripeError } = await stripe.redirectToCheckout({
+        sessionId,
+      });
+
+      if (stripeError) {
+        throw new Error(stripeError.message);
+      }
+    } catch (error) {
+      console.error('Payment error:', error);
+      alert('Payment failed. Please try again.');
+    } finally {
+      setIsProcessingPayment(false);
+    }
   };
 
   return (
@@ -731,13 +789,27 @@ export default function DonatePage() {
                     </div>
                   </div>
                   
-                  <button className="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold py-4 px-4 rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg">
-                    Complete Sacred Donation 🙏
+                  <button 
+                    onClick={handleCompletePayment}
+                    disabled={isProcessingPayment}
+                    className="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed text-white font-bold py-4 px-4 rounded-lg transition-all duration-200 transform hover:scale-105 disabled:transform-none shadow-lg"
+                  >
+                    {isProcessingPayment ? (
+                      <div className="flex items-center justify-center space-x-2">
+                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                        <span>Processing...</span>
+                      </div>
+                    ) : (
+                      'Complete Sacred Donation 🙏'
+                    )}
                   </button>
                   
                   <div className="mt-3 text-center">
                     <p className="text-xs text-gray-500">
                       🔒 Secure Payment • Tax Deductible
+                    </p>
+                    <p className="text-xs text-blue-600 bg-blue-50 px-2 py-1 rounded mt-1">
+                      TEST MODE: Use card 4242 4242 4242 4242 for testing
                     </p>
                   </div>
                 </div>
