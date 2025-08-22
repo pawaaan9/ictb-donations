@@ -55,6 +55,7 @@ export async function POST(request: NextRequest) {
     const getBaseUrl = () => {
       // First try the environment variable
       if (process.env.NEXT_PUBLIC_DOMAIN) {
+        console.log('Using NEXT_PUBLIC_DOMAIN:', process.env.NEXT_PUBLIC_DOMAIN);
         return process.env.NEXT_PUBLIC_DOMAIN;
       }
       
@@ -62,18 +63,23 @@ export async function POST(request: NextRequest) {
       const host = request.headers.get('host');
       const protocol = request.headers.get('x-forwarded-proto') || 
                       request.headers.get('x-forwarded-protocol') || 
-                      (host?.includes('localhost') ? 'http' : 'https');
+                      request.headers.get('x-forwarded-ssl') === 'on' ? 'https' :
+                      (host?.includes('localhost') || host?.includes('127.0.0.1') ? 'http' : 'https');
       
       if (host) {
-        return `${protocol}://${host}`;
+        const detectedUrl = `${protocol}://${host}`;
+        console.log('Auto-detected URL from headers:', detectedUrl);
+        console.log('Headers - host:', host, 'x-forwarded-proto:', request.headers.get('x-forwarded-proto'));
+        return detectedUrl;
       }
       
       // Final fallback (shouldn't happen in production)
+      console.warn('Using fallback URL - this should not happen in production');
       return 'http://localhost:3000';
     };
 
     const baseUrl = getBaseUrl();
-    console.log('Using base URL for redirects:', baseUrl);
+    console.log('Final base URL for redirects:', baseUrl);
 
     // Create Stripe checkout session
     const session = await stripe.checkout.sessions.create({
