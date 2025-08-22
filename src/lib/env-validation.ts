@@ -57,12 +57,19 @@ export function logEnvironmentStatus() {
   
   if (!status.isValid) {
     console.error('❌ Missing required environment variables:', status.missing);
+    console.error('💡 Check your .env.local file for development or environment variables in production');
   } else {
     console.log('✅ All required environment variables are set');
   }
 
   if (status.warnings.length > 0) {
     console.warn('⚠️ Environment warnings:', status.warnings);
+    
+    // Special warning for production domain
+    if (status.warnings.some(w => w.includes('NEXT_PUBLIC_DOMAIN'))) {
+      console.warn('💡 Without NEXT_PUBLIC_DOMAIN set, redirect URLs will be auto-detected from request headers');
+      console.warn('💡 For production, set NEXT_PUBLIC_DOMAIN to your actual domain (e.g., https://yourdomain.com)');
+    }
   }
 
   return status;
