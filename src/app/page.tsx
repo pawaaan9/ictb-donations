@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 
 interface Brick {
   id: string;
@@ -90,13 +90,15 @@ export default function DonatePage() {
         }
         
         if (shouldIncludeBrick) {
+          // Use deterministic pattern based on brick position to avoid hydration mismatch
+          const brickHash = (row * 7 + col * 11 + section.name.length) % 100;
           bricks.push({
             id: `${section.name}-${row}-${col}`,
             x,
             y,
             width: brickWidth,
             height: brickHeight,
-            donated: Math.random() < 0.1, // 10% already donated
+            donated: brickHash < 10, // 10% already donated (deterministic)
             section: section.name,
             price: section.price
           });
@@ -107,6 +109,22 @@ export default function DonatePage() {
   }, []);
 
   const allBricks = chaithyaSections.flatMap(generateBricks);
+
+  // Memoize calculations to prevent hydration mismatches
+  const sponsoredCount = useMemo(() => 
+    allBricks.filter(brick => brick.donated).length, 
+    [allBricks]
+  );
+  
+  const availableCount = useMemo(() => 
+    134500 - sponsoredCount, 
+    [sponsoredCount]
+  );
+  
+  const progressPercentage = useMemo(() => 
+    (sponsoredCount / 134500) * 100, 
+    [sponsoredCount]
+  );
 
   const handleBrickClick = (brick: Brick) => {
     if (!brick.donated) {
@@ -225,62 +243,40 @@ export default function DonatePage() {
                   
                   {/* Sponsored Bricks */}
                   <div className="bg-white rounded-lg p-3 shadow text-center">
-                    {(() => {
-                      const sponsoredCount = allBricks.filter(brick => brick.donated).length;
-                      return (
-                        <>
-                          <div className="text-xl sm:text-2xl font-bold text-green-600 mb-1">{sponsoredCount.toLocaleString()}</div>
-                          <div className="text-xs font-semibold text-gray-600 uppercase">Sponsored</div>
-                        </>
-                      );
-                    })()}
+                    <div className="text-xl sm:text-2xl font-bold text-green-600 mb-1">{sponsoredCount.toLocaleString()}</div>
+                    <div className="text-xs font-semibold text-gray-600 uppercase">Sponsored</div>
                   </div>
                   
                   {/* Available Bricks */}
                   <div className="bg-white rounded-lg p-3 shadow text-center">
-                    {(() => {
-                      const sponsoredCount = allBricks.filter(brick => brick.donated).length;
-                      const availableCount = 134500 - sponsoredCount;
-                      return (
-                        <>
-                          <div className="text-xl sm:text-2xl font-bold text-amber-600 mb-1">{availableCount.toLocaleString()}</div>
-                          <div className="text-xs font-semibold text-gray-600 uppercase">Available</div>
-                        </>
-                      );
-                    })()}
+                    <div className="text-xl sm:text-2xl font-bold text-amber-600 mb-1">{availableCount.toLocaleString()}</div>
+                    <div className="text-xs font-semibold text-gray-600 uppercase">Available</div>
                   </div>
                 </div>
                 
                 {/* Progress Bar */}
                 <div className="mt-4">
-                  {(() => {
-                    const sponsoredCount = allBricks.filter(brick => brick.donated).length;
-                    const progressPercentage = (sponsoredCount / 134500) * 100;
-                    return (
-                      <div className="bg-white rounded-full p-1 shadow-inner">
-                        <div className="relative">
-                          <div className="flex h-4 bg-gray-200 rounded-full overflow-hidden">
-                            <div 
-                              className="bg-gradient-to-r from-green-400 to-green-600 transition-all duration-1000 ease-out"
-                              style={{ width: `${progressPercentage}%` }}
-                            ></div>
-                          </div>
-                          <div className="absolute inset-0 flex items-center justify-center">
-                            <span className="text-xs font-bold text-gray-700">
-                              {progressPercentage.toFixed(2)}% Complete
-                            </span>
-                          </div>
-                        </div>
+                  <div className="bg-white rounded-full p-1 shadow-inner">
+                    <div className="relative">
+                      <div className="flex h-4 bg-gray-200 rounded-full overflow-hidden">
+                        <div 
+                          className="bg-gradient-to-r from-green-400 to-green-600 transition-all duration-1000 ease-out"
+                          style={{ width: `${progressPercentage}%` }}
+                        ></div>
                       </div>
-                    );
-                  })()}
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <span className="text-xs font-bold text-gray-700">
+                          {progressPercentage.toFixed(2)}% Complete
+                        </span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
               <div className="relative h-[400px] sm:h-[500px] lg:h-[700px] mx-auto w-full max-w-[600px] ">
                 <svg
                   ref={svgRef}
-                  key={`svg-${cart.length}`} // Force re-render when cart changes
                   width="100%"
                   height="100%"
                   viewBox="0 0 600 700"
