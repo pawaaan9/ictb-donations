@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Calculate total amount and create line items for Stripe
-    const lineItems = items.map((item: any) => ({
+    const lineItems = items.map((item: { id: string; section: string; price: number }) => ({
       price_data: {
         currency: 'lkr',
         product_data: {

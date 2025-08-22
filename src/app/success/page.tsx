@@ -9,7 +9,7 @@ interface PaymentDetails {
   amount_total: number;
   customer_email: string;
   payment_status: string;
-  metadata: any;
+  metadata: Record<string, string>;
 }
 
 export default function SuccessPage() {
@@ -130,7 +130,7 @@ export default function SuccessPage() {
                     <div className="flex justify-between items-center py-2">
                       <span className="text-gray-600">Bricks Sponsored:</span>
                       <span className="font-bold text-amber-600">
-                        {paymentDetails.metadata.totalBricks} brick{paymentDetails.metadata.totalBricks > 1 ? 's' : ''}
+                        {paymentDetails.metadata.totalBricks} brick{parseInt(paymentDetails.metadata.totalBricks) > 1 ? 's' : ''}
                       </span>
                     </div>
                   )}
@@ -146,7 +146,7 @@ export default function SuccessPage() {
                   <div className="flex items-start space-x-3">
                     <div className="flex-shrink-0 w-6 h-6 bg-amber-500 text-white rounded-full flex items-center justify-center text-sm font-bold">1</div>
                     <p className="text-gray-600">
-                      You'll receive a donation receipt via email within 24 hours.
+                      You&apos;ll receive a donation receipt via email within 24 hours.
                     </p>
                   </div>
                   <div className="flex items-start space-x-3">
@@ -158,7 +158,7 @@ export default function SuccessPage() {
                   <div className="flex items-start space-x-3">
                     <div className="flex-shrink-0 w-6 h-6 bg-amber-500 text-white rounded-full flex items-center justify-center text-sm font-bold">3</div>
                     <p className="text-gray-600">
-                      You'll receive updates on the construction progress of the Sacred Chaithya.
+                      You&apos;ll receive updates on the construction progress of the Sacred Chaithya.
                     </p>
                   </div>
                   <div className="flex items-start space-x-3">
