@@ -15,8 +15,8 @@ function getStripe() {
 
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_URL,
-  token: process.env.UPSTASH_REDIS_TOKEN,
+  url: process.env.KV_REST_API_URL,
+  token: process.env.KV_REST_API_TOKEN,
 });
 
 export async function POST(request: NextRequest) {
