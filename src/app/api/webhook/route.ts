@@ -1,3 +1,24 @@
+// GET endpoint to fetch all purchased bricks and total sponsored bricks
+export async function GET(request: NextRequest) {
+  try {
+    // Get all keys for purchased bricks
+    const keys = await redis.keys('bricks:session:*');
+    const purchases = [];
+    for (const key of keys) {
+      const count = await redis.get<number>(key);
+      purchases.push({ session: key.replace('bricks:session:', ''), bricks: count });
+    }
+    // Get total sponsored bricks
+    const sponsored = await redis.get<number>('bricks:sponsored');
+    return NextResponse.json({
+      sponsored: typeof sponsored === 'number' ? sponsored : Number(sponsored) || 0,
+      purchases,
+    });
+  } catch (error) {
+    console.error('Error fetching bricks data:', error);
+    return NextResponse.json({ error: 'Failed to fetch bricks data', details: String(error) }, { status: 500 });
+  }
+}
 
 
 import { NextRequest, NextResponse } from 'next/server';
@@ -72,10 +93,14 @@ export async function POST(request: NextRequest) {
         console.log('Parsed brickCount:', brickCount);
         if (brickCount > 0) {
           try {
+            // Save the number of bricks bought for this session
+            await redis.set(`bricks:session:${session.id}`, brickCount);
+            // Update the total sponsored bricks
             await redis.incrby('bricks:sponsored', brickCount);
+            console.log(`Saved ${brickCount} bricks for session ${session.id}`);
             console.log(`Updated bricks:sponsored by ${brickCount}`);
           } catch (err) {
-            console.error('Failed to update bricks:sponsored in Redis:', err);
+            console.error('Failed to update bricks:sponsored or save session in Redis:', err);
           }
         } else {
           console.warn('brickCount is missing or zero, not updating Redis');
