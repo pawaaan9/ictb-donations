@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
     
     // Final fallback
     return {
-      url: 'http://localhost:3000',
+      url: 'https://ictb-donations.vercel.app/',
       source: 'fallback'
     };
   };

@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
       
       // Final fallback (shouldn't happen in production)
       console.warn('Using fallback URL - this should not happen in production');
-      return 'http://localhost:3000';
+      return 'https://ictb-donations.vercel.app/';
     };
 
     const baseUrl = getBaseUrl();
