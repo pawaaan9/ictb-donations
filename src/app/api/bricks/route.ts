@@ -3,8 +3,8 @@ import { Redis } from '@upstash/redis';
 
 const TOTAL_BRICKS = 134500;
 
-const redisUrl = process.env.UPSTASH_REDIS_URL;
-const redisToken = process.env.UPSTASH_REDIS_TOKEN;
+const redisUrl = process.env.KV_REST_API_URL;
+const redisToken = process.env.KV_REST_API_TOKEN;
 
 let redis: Redis | null = null;
 if (redisUrl && redisToken) {
