@@ -1,6 +1,8 @@
+
+
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
-
+import { Redis } from '@upstash/redis';
 function getStripe() {
   if (!process.env.STRIPE_SECRET_KEY) {
     throw new Error('STRIPE_SECRET_KEY is not defined');
@@ -10,7 +12,12 @@ function getStripe() {
   });
 }
 
+
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+const redis = new Redis({
+  url: process.env.UPSTASH_REDIS_URL,
+  token: process.env.UPSTASH_REDIS_TOKEN,
+});
 
 export async function POST(request: NextRequest) {
   try {
@@ -56,17 +63,16 @@ export async function POST(request: NextRequest) {
 
     // Handle the event
     switch (event.type) {
-      case 'checkout.session.completed':
+      case 'checkout.session.completed': {
         const session = event.data.object as Stripe.Checkout.Session;
-        console.log('Payment successful:', session.id);
-        
-        // Here you can:
-        // 1. Save the donation to your database
-        // 2. Send confirmation emails
-        // 3. Update brick status to "donated"
-        // 4. Trigger any other business logic
-        
+        // ...existing code for saving transaction...
+        // After saving transaction, update bricks counter in Redis
+        const brickCount = session.metadata?.brickCount ? parseInt(session.metadata.brickCount, 10) : 0;
+        if (brickCount > 0) {
+          await redis.incrby('bricks:sponsored', brickCount);
+        }
         // Example: Log the donation details
+        console.log('Payment successful:', session.id);
         console.log('Donation details:', {
           sessionId: session.id,
           amountTotal: session.amount_total,
@@ -74,8 +80,8 @@ export async function POST(request: NextRequest) {
           customerEmail: session.customer_details?.email,
           metadata: session.metadata,
         });
-        
         break;
+      }
 
       case 'payment_intent.succeeded':
         const paymentIntent = event.data.object as Stripe.PaymentIntent;

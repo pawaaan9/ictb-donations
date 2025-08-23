@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useCallback, useRef, useMemo } from 'react';
+import { useEffect } from 'react';
 import { stripePromise } from '@/lib/stripe';
 
 interface Brick {
@@ -36,6 +37,13 @@ export default function DonatePage() {
     centerY: 0,
   });
   const svgRef = useRef<SVGSVGElement>(null);
+  const [brickStats, setBrickStats] = useState<{ total: number; sponsored: number; available: number } | null>(null);
+  useEffect(() => {
+    fetch('/api/bricks')
+      .then(res => res.json())
+      .then(data => setBrickStats(data))
+      .catch(() => setBrickStats(null));
+  }, []);
 
   // Define the Chaithya structure with four stacked parts
   const chaithyaSections = [
@@ -113,20 +121,10 @@ export default function DonatePage() {
   const allBricks = chaithyaSections.flatMap(generateBricks);
 
   // Memoize calculations to prevent hydration mismatches
-  const sponsoredCount = useMemo(() => 
-    allBricks.filter(brick => brick.donated).length, 
-    [allBricks]
-  );
-  
-  const availableCount = useMemo(() => 
-    134500 - sponsoredCount, 
-    [sponsoredCount]
-  );
-  
-  const progressPercentage = useMemo(() => 
-    (sponsoredCount / 134500) * 100, 
-    [sponsoredCount]
-  );
+  const sponsoredCount = brickStats?.sponsored ?? 0;
+  const availableCount = brickStats?.available ?? 0;
+  const totalCount = brickStats?.total ?? 134500;
+  const progressPercentage = totalCount > 0 ? (sponsoredCount / totalCount) * 100 : 0;
 
   const handleSvgClick = (e: React.MouseEvent<SVGSVGElement>) => {
     if (!svgRef.current) return;
@@ -339,13 +337,13 @@ export default function DonatePage() {
                   
                   {/* Sponsored Bricks */}
                   <div className="bg-white rounded-lg p-3 shadow text-center">
-                    <div className="text-xl sm:text-2xl font-bold text-green-600 mb-1">{sponsoredCount.toLocaleString()}</div>
+                    <div className="text-xl sm:text-2xl font-bold text-green-600 mb-1">{(sponsoredCount ?? 0).toLocaleString()}</div>
                     <div className="text-xs font-semibold text-gray-600 uppercase">Sponsored</div>
                   </div>
                   
                   {/* Available Bricks */}
                   <div className="bg-white rounded-lg p-3 shadow text-center">
-                    <div className="text-xl sm:text-2xl font-bold text-amber-600 mb-1">{availableCount.toLocaleString()}</div>
+                    <div className="text-xl sm:text-2xl font-bold text-amber-600 mb-1">{(availableCount ?? 0).toLocaleString()}</div>
                     <div className="text-xs font-semibold text-gray-600 uppercase">Available</div>
                   </div>
                 </div>
@@ -357,12 +355,12 @@ export default function DonatePage() {
                       <div className="flex h-4 bg-gray-200 rounded-full overflow-hidden">
                         <div 
                           className="bg-gradient-to-r from-green-400 to-green-600 transition-all duration-1000 ease-out"
-                          style={{ width: `${progressPercentage}%` }}
+                          style={{ width: `${(progressPercentage ?? 0)}%` }}
                         ></div>
                       </div>
                       <div className="absolute inset-0 flex items-center justify-center">
                         <span className="text-xs font-bold text-gray-700">
-                          {progressPercentage.toFixed(2)}% Complete
+                          {(progressPercentage ?? 0).toFixed(2)}% Complete
                         </span>
                       </div>
                     </div>
@@ -840,9 +838,6 @@ export default function DonatePage() {
                   <div className="mt-3 text-center">
                     <p className="text-xs text-gray-500">
                       🔒 Secure Payment • Tax Deductible
-                    </p>
-                    <p className="text-xs text-blue-600 bg-blue-50 px-2 py-1 rounded mt-1">
-                      TEST MODE: Use card 4242 4242 4242 4242 for testing
                     </p>
                   </div>
                 </div>
